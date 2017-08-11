@@ -3,4 +3,11 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="hintColor">#3d0009ba</color>
+
+    <color name="textColorMainActivity">#6a003acc</color>
+
+    <color name="mainBackgroundColor">#a7e8ff</color>
+
 </resources>
