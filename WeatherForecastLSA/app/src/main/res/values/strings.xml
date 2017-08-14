@@ -1,5 +1,0 @@
-<resources>
-    <string name="app_name">WeatherForecastLSA</string>
-    <string name="hintLocationMainActivity">Введите населенный пункт</string>
-    <string name="textButtonSearchMainActivity">Поиск</string>
-</resources>
