@@ -1,17 +1,28 @@
 package com.android.bigserj.domain.interaction.base;
 
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
+
 public abstract class UseCase<InParam, OutParam> {
 
+    private Disposable disposable;
 
-    // ищем данные по городу, который ввели
+    protected abstract Observable<OutParam> buildUseCase(InParam param);
 
-    protected abstract OutParam buildUseCase();
-
-    public OutParam execute(InParam param){
-        return buildUseCase();
+    public void execute(InParam param, DisposableObserver<OutParam> disposableObserver) {
+        disposable = buildUseCase(param)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.newThread())
+                .subscribeWith(disposableObserver);
     }
 
-
+    public void dispose() {
+        if(!disposable.isDisposed() && disposable != null)
+            disposable.dispose();
+    }
 
 }

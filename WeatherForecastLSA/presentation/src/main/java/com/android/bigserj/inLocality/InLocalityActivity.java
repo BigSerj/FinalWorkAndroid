@@ -5,15 +5,30 @@ import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
-import android.widget.Button;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 
 import com.android.bigserj.R;
-import com.android.bigserj.base.BaseActivity;
+import com.android.bigserj.base.BaseFragmentActivity;
 import com.android.bigserj.databinding.ActivityInLocalityBinding;
-import com.android.bigserj.mainActivity.MainActivity;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
-public class InLocalityActivity extends BaseActivity {
+import static com.android.bigserj.inLocality.Location1ViewModel.*;
+import static com.google.android.gms.plus.PlusOneDummyView.TAG;
+
+public class InLocalityActivity extends BaseFragmentActivity {
+
+    public static void show(InLocalityActivity activity, Class toAtivity){
+        Intent intent = new Intent(activity, toAtivity); // объект, который выполняет для нас что-либо (намерения, наприме, перейти куда-либо или открыт что-то)
+        activity.startActivity(intent);
+    }
+
+    public static final String WEATHER = "WEATHER";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -21,22 +36,47 @@ public class InLocalityActivity extends BaseActivity {
         InLocalityViewModel viewModel = new InLocalityViewModel(this);
         this.viewModel = viewModel;
 
-
-        ActivityInLocalityBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_in_locality);
+        ActivityInLocalityBinding binding = DataBindingUtil
+                .setContentView(this, R.layout.activity_in_locality);
 
         binding.setViewModel(viewModel);
 
         super.onCreate(savedInstanceState);
 
-        Button backButton = (Button)findViewById(R.id.backButton);
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(InLocalityActivity.this, MainActivity.class); // объект, который выполняет для нас что-либо (намерения, наприме, перейти куда-либо или открыт что-то)
-                startActivity(intent);
-//                overridePendingTransition(R.anim.diagonaltranslate,R.anim.alpha);
-            }
-        });
+
+
+
+
+        String latLong = getIntent().getStringExtra(LAT_LONG)
+                .replace("lat/lng: (","").replace(")","");
+        String namePlace = getIntent().getStringExtra(NAME_PLACE);
+
+        String weather = getIntent().getStringExtra(WEATHER);
+
+
+
+        showFragment(getSupportFragmentManager(), Location1Fragment
+                .newInstance(getSupportFragmentManager(), latLong, namePlace), true);
+
+
+
+
+//        showFragment(getSupportFragmentManager(), Location2Fragment
+//                .newInstance(getSupportFragmentManager(), weather), true);
+
+
+
+
+
 
     }
+
+    public static void showFragment(FragmentManager fragmentManager, Fragment fragment,
+                                    boolean addToBackStack){
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.container,fragment,fragment.getClass().getName());
+        if (addToBackStack) fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+
 }
