@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:background="@drawable/gradient_bcgr_main_activity"
+        android:background="@drawable/gradient_bcgr_page"
         android:weightSum="100">
 
 
@@ -33,10 +33,10 @@
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="296dp"
-            android:background="@drawable/rect"
+            android:background="@drawable/rect_location"
+            android:textColor="@color/white"
             android:onClick="@{() -> viewModel.fromMainToGeocoder()}"
             android:text="@string/gpsButtonSearchMainActivity"
-            android:textColor="@color/textButton"
             android:visibility="@{viewModel.state==STATE.DATA ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toTopOf="@+id/searchButton"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -85,10 +85,34 @@
             app:layout_constraintVertical_bias="0.0" />
 
 
+
+        <ImageView
+            android:layout_width="0dp"
+            android:background="@color/darkBlue"
+            android:visibility="@{viewModel.state==STATE.DATA ? View.VISIBLE : View.GONE}"
+            android:layout_height="20dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:background="@drawable/rect"
+            android:visibility="@{viewModel.state==STATE.DATA ? View.VISIBLE : View.GONE}"
+            android:layout_height="70dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
         <FrameLayout
             android:id="@+id/containerSearch"
             android:layout_width="330dp"
-            android:layout_height="490dp"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
@@ -97,7 +121,10 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
+
 
 
         <ImageView
@@ -114,7 +141,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.123" />
+            app:layout_constraintVertical_bias="0.123"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/image_earth"
@@ -130,7 +159,9 @@
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.296" />
+            app:layout_constraintVertical_bias="0.296"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
         <ImageView
             android:id="@+id/image_Cloud"
@@ -147,8 +178,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.361"
-            tools:layout_editor_absoluteX="34dp"
-            tools:layout_editor_absoluteY="150dp" />
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
 
     </android.support.constraint.ConstraintLayout>

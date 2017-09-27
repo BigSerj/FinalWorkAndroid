@@ -19,9 +19,13 @@ public class DataOnTheLocality implements DataModel{
     @SerializedName("weather")
     private String weather;
 
-    // текущая температура
+    // текущая температура ы градусах цельсия
     @SerializedName("temp_c")
     private String tempC;
+
+    // текущая температура
+    @SerializedName("temp_f")
+    private String tempF;
 
     // текущая температура по ощущениям
     @SerializedName("feelslike_c")
@@ -55,7 +59,13 @@ public class DataOnTheLocality implements DataModel{
     @SerializedName("icon_url")
     private String iconUrl;
 
+    public String getTempF() {
+        return tempF;
+    }
 
+    public void setTempF(String tempF) {
+        this.tempF = tempF;
+    }
     public DisplayLocation getDisplayLocation() {
         return displayLocation;
     }

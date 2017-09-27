@@ -16,7 +16,6 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import static android.content.ContentValues.TAG;
-import static com.android.bigserj.Constants.*;
 
 public class GooglePlaceApiViewModel implements BaseViewModelFragment,PlaceSelectionListener {
 
@@ -31,20 +30,12 @@ public class GooglePlaceApiViewModel implements BaseViewModelFragment,PlaceSelec
 //        // убираем фрагмент с выбором place
         googlePlaceApiFragment.getActivity().getSupportFragmentManager().popBackStack();
 
-//        Toast.makeText(googlePlaceApiFragment.getContext(),
-//                place.getAddress()+" \n"+place.getName()+" \n"+place.getLatLng().latitude+" \n"+
-//                        place.getLatLng().longitude,
-//                Toast.LENGTH_LONG).show();
-
         // заполняем инфой соотв поля нового места
         PlaceFormViewModel.cityPlaceForm = place.getName().toString();
         PlaceFormViewModel.latPlaceForm = String.valueOf(place.getLatLng().latitude);
         PlaceFormViewModel.lonPlaceForm = String.valueOf(place.getLatLng().longitude);
 
         Intent intent = new Intent(googlePlaceApiFragment.getActivity(), PlaceFormActivity.class); // объект, который выполняет для нас что-либо (намерения, наприме, перейти куда-либо или открыт что-то)
-//        intent.putExtra(PUT_EXTRA_LAT,String.valueOf(place.getLatLng().latitude));
-//        intent.putExtra(PUT_EXTRA_LON,String.valueOf(place.getLatLng().longitude));
-//        intent.putExtra(PUT_EXTRA_PLACE_NAME,String.valueOf(place.getName()));
         googlePlaceApiFragment.getActivity().startActivity(intent);
     }
 
@@ -52,7 +43,8 @@ public class GooglePlaceApiViewModel implements BaseViewModelFragment,PlaceSelec
     public void onError(Status status) {
         Log.e(TAG, "onError: Status = " + status.toString());
 
-        Toast.makeText(googlePlaceApiFragment.getContext(), "Place selection failed: " + status.getStatusMessage(),
+        Toast.makeText(googlePlaceApiFragment.getContext(),
+                "Place selection failed: " + status.getStatusMessage(),
                 Toast.LENGTH_SHORT).show();
     }
 

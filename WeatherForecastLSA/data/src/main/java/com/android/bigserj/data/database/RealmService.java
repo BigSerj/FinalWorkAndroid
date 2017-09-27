@@ -74,18 +74,32 @@ public class RealmService {
         }
     }
 
-    // сохраняем в бд так, что бы новое - обновилось, а старое удалилось (используется при удалении)
+    private void printAll(){
+        ArrayList<LatLon> listLL = getAllLatLon();
+        for (int i=0;i<listLL.size();i++) {
+            System.out.println("ALLLDATA     " +i+" "+listLL.get(i).getId());
+            System.out.println("ALLLDATA     " +i+" "+listLL.get(i).getCity());
+            System.out.println("ALLLDATA     " +i+" "+listLL.get(i).getLat());
+            System.out.println("ALLLDATA     " +i+" "+listLL.get(i).getLon());
+        }
+    }
+
+    // пересохраняем в бд
     public void saveArrayData(ArrayList<LatLon> latLonArrayList) {
+
+        System.out.println("TTTTDATA------------------------------------------");
+        for(int i=0;i<latLonArrayList.size();i++)
+            System.out.println("TTTTDATA   "+latLonArrayList.get(i).getId() + " "+ latLonArrayList.get(i).getCity());
+        System.out.println("TTTTDATA------------------------------------------");
+
+        deleteAllDatabaseFields();
         for (int i=0;i<latLonArrayList.size();i++)
-            // либо сохраняем если небыло либо перезаписываем
             saveData(latLonArrayList.get(i));
-        // удаляем последнюю строку
-        removeTheFieldWithId(getCountRows());
     }
 
 
 
-        // удаляем поле с указанным id и смещаем все что прпвее на одну строку назад
+    // удаляем поле с указанным id и смещаем все что прпвее на одну строку назад
     public void removeTheFieldWithId(int id) {
         realm.beginTransaction();
         realm

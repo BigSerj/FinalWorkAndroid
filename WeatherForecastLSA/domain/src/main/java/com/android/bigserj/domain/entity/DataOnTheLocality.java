@@ -5,41 +5,50 @@ public class DataOnTheLocality implements DomainModel{
 
     private DisplayLocation displayLocationModel = new DisplayLocation();
 
-    // время измерения
+    // время измерения -
     private String observationTime;
 
-    // текущая погода
+    // текущая погода -
     private String weather;
 
-    // текущая температура
+    // текущая температура + F/C
     private String tempC;
 
-    // текущая температура по ощущениям
+    // текущая температура
+    private String tempF;
+
+    // текущая температура по ощущениям + F/C
     private String tempCFeelsLike;
 
-    // текущее давление в миллибарах. для перевода в мм рт ст: * 0.75006375541921
+    // текущее давление в миллибарах. для перевода в мм рт ст: * 0.75006375541921 + мм.рт.ст./мБар
     private String pressure_mb;
 
-    // текущая влажность
+    // текущая влажность -
     private String humidity;
 
-    // направление ветра (аббревиатура)
+    // направление ветра (аббревиатура) -
     private String windDir;
 
-    // направление ветра (градусы на окружности)
+    // направление ветра (градусы на окружности) -
     private String windDegrees;
 
-    // скорость ветра
+    // скорость ветра +
     private String windSpeed;
 
-    // порывы ветра до
+    // порывы ветра до +
     private String windPoriviSreed;
 
-    // ссылка на иконку соответствующую текущей погоде (gif)
+    // ссылка на иконку соответствующую текущей погоде (gif) -
     private String iconUrl;
 
 
+    public String getTempF() {
+        return tempF;
+    }
 
+    public void setTempF(String tempF) {
+        this.tempF = tempF;
+    }
     public DisplayLocation getDisplayLocationModel() {
         return displayLocationModel;
     }

@@ -5,7 +5,7 @@ import com.android.bigserj.domain.interaction.DeleteAllDBUseCase;
 import com.android.bigserj.domain.interaction.GetDataOnTheLocalityUseCase;
 import com.android.bigserj.domain.interaction.GetLatLonUseCase;
 import com.android.bigserj.domain.interaction.GetSizeDBUseCase;
-import com.android.bigserj.domain.interaction.SetArrayLatLonToTheDBWheneDeleteUseCase;
+import com.android.bigserj.domain.interaction.SetArrayLatLonToTheDBWhenDeleteUseCase;
 import com.android.bigserj.domain.interaction.SetLatLonToTheDBUseCase;
 
 import javax.inject.Singleton;
@@ -45,8 +45,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public SetArrayLatLonToTheDBWheneDeleteUseCase setArrayLatLonToTheDBWheneDeleteUseCase(){
-        return new SetArrayLatLonToTheDBWheneDeleteUseCase();
+    public SetArrayLatLonToTheDBWhenDeleteUseCase setArrayLatLonToTheDBWheneDeleteUseCase(){
+        return new SetArrayLatLonToTheDBWhenDeleteUseCase();
     }
 
     @Provides

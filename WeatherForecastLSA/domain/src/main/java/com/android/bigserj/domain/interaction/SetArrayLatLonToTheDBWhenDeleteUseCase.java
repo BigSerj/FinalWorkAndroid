@@ -12,7 +12,7 @@ import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.annotations.NonNull;
 
-public class SetArrayLatLonToTheDBWheneDeleteUseCase extends UseCase<ArrayList<LatLon>, Void> {
+public class SetArrayLatLonToTheDBWhenDeleteUseCase extends UseCase<ArrayList<LatLon>, Void> {
 
     @Override
     protected Observable<Void> buildUseCase(final ArrayList<LatLon> latLonArrayList) {
@@ -39,13 +39,6 @@ public class SetArrayLatLonToTheDBWheneDeleteUseCase extends UseCase<ArrayList<L
             latLonData.setLon(latLonArrayListDomain.get(i).getLon());
             latLonArrayListData.add(latLonData);
         }
-        for(int i=0;i<latLonArrayListData.size();i++) {
-            if (latLonArrayListData.get(i)!=null)
-                System.out.println("MASSIVE "+latLonArrayListData.get(i).getId());
-            else
-                System.out.println("MASSIVE ---");
-        }
-        System.out.println("MASSIVE "+latLonArrayListData.size());
         return latLonArrayListData;
     }
 

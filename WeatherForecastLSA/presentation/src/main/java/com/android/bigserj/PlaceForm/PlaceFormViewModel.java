@@ -1,7 +1,9 @@
 package com.android.bigserj.PlaceForm;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.ObservableField;
 import android.location.Location;
 import android.support.v4.app.Fragment;
@@ -10,8 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 
-import com.android.bigserj.MyLocality;
+import com.android.bigserj.MyLocalityAdapter;
 import com.android.bigserj.R;
+import com.android.bigserj.PageSettingsAdapter;
 import com.android.bigserj.TestApplication;
 import com.android.bigserj.ToastMessage;
 import com.android.bigserj.base.BaseViewModel;
@@ -19,13 +22,10 @@ import com.android.bigserj.domain.entity.LatLon;
 import com.android.bigserj.domain.interaction.DeleteAllDBUseCase;
 import com.android.bigserj.domain.interaction.GetLatLonUseCase;
 import com.android.bigserj.domain.interaction.GetSizeDBUseCase;
-import com.android.bigserj.domain.interaction.SetArrayLatLonToTheDBWheneDeleteUseCase;
-import com.android.bigserj.domain.interaction.SetLatLonToTheDBUseCase;
-import com.android.bigserj.inLocality.Location1ViewModel;
+import com.android.bigserj.domain.interaction.SetArrayLatLonToTheDBWhenDeleteUseCase;
 import com.android.bigserj.myPlaces.MyPlacesActivity;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -34,44 +34,45 @@ import io.reactivex.observers.DisposableObserver;
 
 import static com.android.bigserj.Constants.*;
 
+
 public class PlaceFormViewModel implements BaseViewModel {
 
-    public PlaceFormActivity placeFormActivity;
+    public static String cityPlaceForm;
+    public static String latPlaceForm;
+    public static String lonPlaceForm;
+    public static int pageCount=-1;
+    private PlaceFormActivity placeFormActivity;
 
-    public PlaceFormViewModel(PlaceFormActivity placeFormActivity) {
+    PlaceFormViewModel(PlaceFormActivity placeFormActivity) {
         this.placeFormActivity = placeFormActivity;
         TestApplication.appComponent.inject(this);
     }
 
     @Inject
-    SetArrayLatLonToTheDBWheneDeleteUseCase setArrayLatLonToTheDBWheneDeleteUseCase;
+    SetArrayLatLonToTheDBWhenDeleteUseCase setArrayLatLonToTheDBWhenDeleteUseCase;
     @Inject
     GetLatLonUseCase getLatLonUseCase;
     @Inject
     GetSizeDBUseCase getSizeDBUseCase;
     @Inject
     DeleteAllDBUseCase deleteAllDBUseCase;
-    @Inject
-    SetLatLonToTheDBUseCase setLatLonToTheDBUseCase;
+
 
 
     // текущая геолокация
-    private MyLocality myLocality;
-
-    private PlaceFormMyAdapter adapter;
+    private MyLocalityAdapter myLocality;
+    // пейджер
     private ViewPager pager;
-
-    public static int currentPage=0;
-    public static String cityPlaceForm;
-    public static String latPlaceForm;
-    public static String lonPlaceForm;
-
-    // для хранения фраментов из бд
-    ArrayList<LatLon> fragmentsFromDatabase;
+    // адапетр для пейджера
+    private PlaceFormMyAdapter adapter;
+    // лист с объектами, показывающимися в фрагментах
+    private ArrayList<LatLon> fragments2 = new ArrayList<>();
 
 
-
-    public enum STATE_SEARCH {SEARCH, CLOSE_SEARCH}
+    // для отображение/сокрытия на экране фрагментов
+    public enum STATE_SEARCH {
+        SEARCH, CLOSE_SEARCH
+    }
 
     public ObservableField<STATE_SEARCH> state_search = new ObservableField<>(STATE_SEARCH.SEARCH);
 
@@ -87,18 +88,9 @@ public class PlaceFormViewModel implements BaseViewModel {
 
     @Override
     public void init() {
-    }
-
-    @Override
-    public void release() {
-        currentPage = 0;
-    }
-
-    @Override
-    public void resume() {
 
         // инициализируем объект класса для работы с текущей геолокацией
-        myLocality = new MyLocality(placeFormActivity);
+        myLocality = new MyLocalityAdapter(placeFormActivity);
 
         // инициализируем верхний тулбар
         Toolbar toolbarTop = (Toolbar) placeFormActivity.findViewById(R.id.toolbar2);
@@ -114,68 +106,110 @@ public class PlaceFormViewModel implements BaseViewModel {
             }
         });
 
+        // инициализируем адаптер для листания фрагментов
+        pager = (ViewPager) placeFormActivity.findViewById(R.id.pager);
+        adapter = new PlaceFormMyAdapter(placeFormActivity.getSupportFragmentManager());
+    }
 
+    @Override
+    public void release() {
+    }
 
-        // создаем рабочую коллекцию фрагментов пейджера
-        final List<Fragment> fragments = new ArrayList<>();
-        // в любом случае 1 страница будет
-        fragments.add(PlaceFormPageFragment.newInstance(placeFormActivity
-                        .getSupportFragmentManager(),
-                latPlaceForm, lonPlaceForm, cityPlaceForm));
+    @Override
+    public void resume() {
+
+        // считываем состояние первой страницы
+        loadFirstPageSharedPreferences();
 
         // запрашиваем весь список LatLon из бд
         getSizeDBUseCase.execute(null, new DisposableObserver<ArrayList<LatLon>>() {
             @Override
             public void onNext(@NonNull ArrayList<LatLon> arrayOfLatLonDomain) {
 
-                fragmentsFromDatabase = arrayOfLatLonDomain;
+                // устанавливаем геолокацию
+                if (latPlaceForm==null || lonPlaceForm==null)
+                    getMyLocality();
 
-//                заполняем массив формами фрагментов в обратном порядке
-                for (int i = arrayOfLatLonDomain.size()-1; i >= 0; i--) {
+                // заполнение пейджера
+                ArrayList<Fragment> fragments = new ArrayList<>();
+
+                // если открываем из поиска фрагмента - очищаем коллекцию фрагментов
+                if (!fragments2.isEmpty())
+                    fragments2.clear();
+
+                // если заходим из поиска - создаем страницу для поиска
+                if (pageCount==-1) {
                     fragments.add(PlaceFormPageFragment
                             .newInstance(placeFormActivity.getSupportFragmentManager(),
-                                    arrayOfLatLonDomain.get(i).getLat(),
-                                    arrayOfLatLonDomain.get(i).getLon(),
-                                    arrayOfLatLonDomain.get(i).getCity()));
+                                    -1, latPlaceForm, lonPlaceForm, cityPlaceForm));
+                    // добавляем первым в массив LatLon-ов
+                    LatLon latLon = new LatLon();
+                    latLon.setId(-1);
+                    latLon.setCity(cityPlaceForm);
+                    latLon.setLat(latPlaceForm);
+                    latLon.setLon(lonPlaceForm);
+                    fragments2.add(latLon);
+                    state_add.set(STATE_ADD.ADD);
+                }else{
+                    // меняем статус кнопки на "удалить"
+                    state_add.set(STATE_ADD.DELETE);
+                }
+                // заполняем коллекции фрагментов из памяти
+                if (!arrayOfLatLonDomain.isEmpty()) {
+                    for (int i = 0; i < arrayOfLatLonDomain.size(); i++) {
+                        fragments.add(PlaceFormPageFragment
+                                .newInstance(placeFormActivity.getSupportFragmentManager(),
+                                        arrayOfLatLonDomain.get(i).getId(),
+                                        arrayOfLatLonDomain.get(i).getLat(),
+                                        arrayOfLatLonDomain.get(i).getLon(),
+                                        arrayOfLatLonDomain.get(i).getCity()));
+                        fragments2.add(arrayOfLatLonDomain.get(i));
+                    }
                 }
 
-                // объявляем адаптер для листания фрагментов
-                pager = (ViewPager) placeFormActivity.findViewById(R.id.pager);
-                adapter = new PlaceFormMyAdapter(placeFormActivity.getSupportFragmentManager());
-                adapter.setmFragmentList(fragments);
-                adapter.notifyDataSetChanged();
-                pager.setAdapter(adapter);
-                // считываем текущую страницу
+                // мониторим какой пейдж сейчас на экране
                 pager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                    public void onPageScrolled(int position, float positionOffset,
+                                               int positionOffsetPixels) {
                     }
+
                     @Override
                     public void onPageSelected(int position) {
-//                        Toast.makeText(placeFormActivity, adapter.getItem(position).toString(), Toast.LENGTH_SHORT).show();
-                        currentPage = position;
+                        if (fragments2.get(position).getId() == -1)
+                            state_add.set(STATE_ADD.ADD);
+                        else
+                            // меняем статус кнопки на "удалить"
+                            state_add.set(STATE_ADD.DELETE);
                     }
+
                     @Override
                     public void onPageScrollStateChanged(int state) {
-
                     }
                 });
+
+
+                // заполняем и обновляем пейджер данными
+                adapter.setFragmentList(fragments);
+                adapter.notifyDataSetChanged();
+                pager.setAdapter(adapter);
+                if (pageCount>-1) {
+                    pager.setCurrentItem(pageCount);
+                    pageCount=-1;
+                }
+
             }
+
             @Override
             public void onError(@NonNull Throwable e) {
                 ToastMessage.showToast(placeFormActivity, TOAST_PLACE_DATABASE_BUG);
             }
+
             @Override
             public void onComplete() {
 
             }
         });
-
-
-
-
-
 
 
 
@@ -184,136 +218,223 @@ public class PlaceFormViewModel implements BaseViewModel {
     @Override
     public void pause() {
         getSizeDBUseCase.dispose();
+        setArrayLatLonToTheDBWhenDeleteUseCase.dispose();
+        getLatLonUseCase.dispose();
+        deleteAllDBUseCase.dispose();
+
+        // сохраняем состояние первой страницы
+        saveFirstPageSharedPreferences();
+
+        fragments2.clear();
     }
 
 
+
+
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------
+
+
+// --------------------------------------------------SAVE/READ SharedPrefs
+    private void loadFirstPageSharedPreferences(){
+
+    }
+    private void saveFirstPageSharedPreferences(){
+
+    }
+// --------------------------------------------------
+
+
+
+
+
+// --------------------------------------------------ДОБАВИТЬ/УДАЛИТЬ
+    // НАЖАТИЕ ДОБАВИТЬ
+    public void addFragment() {
+
+        ArrayList<LatLon> fragmentsDelete = new ArrayList<>();
+//        for (int i = 0; i < fragments2.size(); i++)
+//            fragmentsDelete.add(fragments2.get(i));
+        fragmentsDelete.addAll(fragments2);
+
+        for (int i = 0; i < fragmentsDelete.size(); i++)
+            System.out.println("TTTT2   " + fragmentsDelete.get(i).getId() + " " + fragmentsDelete.get(i).getCity());
+
+        // увеличиваем все id на 1
+        for (int i = 0; i < fragmentsDelete.size(); i++)
+            fragmentsDelete.get(i).setId(fragmentsDelete.get(i).getId() + 1);
+
+
+        // и сохраняем весь лист в бд
+        saveAll(fragmentsDelete);
+
+
+        // создаем рабочую коллекцию фрагментов пейджера
+        ArrayList<Fragment> fragments = new ArrayList<>();
+
+        for (int i = 0; i < fragmentsDelete.size(); i++) {
+            fragments.add(PlaceFormPageFragment
+                    .newInstance(placeFormActivity.getSupportFragmentManager(),
+                            fragmentsDelete.get(i).getId(),
+                            fragmentsDelete.get(i).getLat(),
+                            fragmentsDelete.get(i).getLon(),
+                            fragmentsDelete.get(i).getCity()));
+        }
+
+        // обновляем вьюху
+        adapter.setFragmentList(fragments);
+        adapter.notifyDataSetChanged();
+        pager.setAdapter(adapter);
+
+        fragments2.clear();
+        fragments2.addAll(fragmentsDelete);
+//        for (int i = 0; i < fragmentsDelete.size(); i++)
+//            fragments2.add(fragmentsDelete.get(i));
+
+        for (int i = 0; i < fragmentsDelete.size(); i++)
+            System.out.println("TTTT3   " + fragmentsDelete.get(i).getId() + " " + fragmentsDelete.get(i).getCity());
+
+        // меняем статус кнопки на "удалить"
+        state_add.set(STATE_ADD.DELETE);
+
+    }
+    // НАЖАТИЕ УДАЛИТЬ
+    public void deleteFragment() {
+
+        ArrayList<LatLon> fragmentsDelete = new ArrayList<>();
+        for (int i = 0; i < fragments2.size(); i++)
+            fragmentsDelete.add(fragments2.get(i));
+//        fragmentsDelete.addAll(fragments2);
+
+
+        int pageCount = pager.getCurrentItem();
+        if (fragments2.get(0).getId() == -1) {
+            fragmentsDelete.remove(0);
+            pageCount--;
+        }
+
+        // от текущего до последнего смещаем влево на 1
+        for (int i = pageCount; i < fragmentsDelete.size() - 1; i++) {
+            fragmentsDelete.set(i, fragmentsDelete.get(i + 1));
+            // и понижаем id на 1
+            fragmentsDelete.get(i).setId(fragmentsDelete.get(i).getId() - 1);
+        }
+
+        // последний удаляем
+        fragmentsDelete.remove(fragmentsDelete.size() - 1);
+
+
+        // и сохраняем весь лист в бд
+        saveAll(fragmentsDelete);
+
+
+        ArrayList<LatLon> fragmentsDelete2 = new ArrayList<>();
+        for (int i = 0; i < fragmentsDelete.size(); i++)
+            fragmentsDelete2.add(fragmentsDelete.get(i));
+
+
+        if (fragments2.get(0).getId() == -1) {
+            fragmentsDelete2.add(fragments2.get(0));
+            for (int i = fragmentsDelete2.size() - 1; i >= 1; i--)
+                fragmentsDelete2.set(i, fragmentsDelete2.get(i - 1));
+            fragmentsDelete2.set(0, fragments2.get(0));
+        }
+
+        // создаем промежуточную коллекцию фрагментов пейджера
+        ArrayList<Fragment> fragments = new ArrayList<>();
+
+        fragments2.clear();
+        if (!fragmentsDelete2.isEmpty()) {
+            for (int i = 0; i < fragmentsDelete2.size(); i++) {
+                fragments.add(PlaceFormPageFragment
+                        .newInstance(placeFormActivity.getSupportFragmentManager(),
+                                fragmentsDelete2.get(i).getId(),
+                                fragmentsDelete2.get(i).getLat(),
+                                fragmentsDelete2.get(i).getLon(),
+                                fragmentsDelete2.get(i).getCity()));
+                fragments2.add(fragmentsDelete2.get(i));
+            }
+        } else {
+            fragments.add(PlaceFormPageFragment
+                    .newInstance(placeFormActivity.getSupportFragmentManager(),
+                            -1, latPlaceForm, lonPlaceForm, cityPlaceForm));
+            // добавляем первым в массив LatLon-ов
+            LatLon latLon = new LatLon();
+            latLon.setId(-1);
+            latLon.setCity(cityPlaceForm);
+            latLon.setLat(latPlaceForm);
+            latLon.setLon(lonPlaceForm);
+            fragments2.add(latLon);
+        }
+
+        // обновляем вьюху
+        adapter.setFragmentList(fragments);
+        adapter.notifyDataSetChanged();
+        pager.setAdapter(adapter);
+
+
+        if (fragments2.get(0).getId() == -1)
+            state_add.set(STATE_ADD.ADD);
+    }
+    // сохранение всей бд
+    private void saveAll(ArrayList<LatLon> fragmentsDelete){
+        // и сохраняем весь лист в бд
+        setArrayLatLonToTheDBWhenDeleteUseCase.execute(fragmentsDelete,
+                new DisposableObserver<Void>() {
+                    @Override
+                    public void onNext(@NonNull Void aVoid) {
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+// --------------------------------------------------Правка названия города,при поиске по геолокации
+    void onChangeCity(String city) {
+        cityPlaceForm = city;
+        fragments2.get(0).setCity(city);
+        saveAll(fragments2);
+    }
+// --------------------------------------------------
+
+
+
+// --------------------------------------------------ПОИСК
     // НАЖАТИЕ ПОИСК
     public void inflateSearchFragment() {
+
         testStateSettings();
         PlaceFormActivity.showFragment(placeFormActivity.getSupportFragmentManager(),
                 PlaceFormSearchFragment
                         .newInstance(placeFormActivity.getSupportFragmentManager()),
                 true, R.id.containerSearchForm);
+
         state_search.set(STATE_SEARCH.CLOSE_SEARCH);
     }
-
+    // НАЖАТИЕ ЗАКРЫТЬ ПОИСК
     public void closeSearchFragment() {
         closeLastFragment();
         state_search.set(STATE_SEARCH.SEARCH);
     }
+    // обработчик нажатия в ПОИСКЕ
+    void onTouchSearch() {
 
-    // НАЖАТИЕ ДОБАВИТЬ/УДАЛИТЬ
-    public void addFragment() {
-
-////         УДАЛЕНИЕ ВСЕЙ БД (!!!   АККУРАТНО   !!!)
-//        deleteAllDBUseCase.execute(null, new DisposableObserver<Void>() {
-//            @Override
-//            public void onNext(@NonNull Void aVoid) {
-//
-//            }
-//
-//            @Override
-//            public void onError(@NonNull Throwable e) {
-//                ToastMessage.showToast(placeFormActivity, "ERROR");
-//            }
-//
-//            @Override
-//            public void onComplete() {
-//                ToastMessage.showToast(placeFormActivity, "OK");
-//            }
-//        });
-
-
-
-
-        LatLon latLon = new LatLon();
-        latLon.setId(fragmentsFromDatabase.size()+1); // добавляем последним в конец массива
-        latLon.setCity(cityPlaceForm);
-        latLon.setLat(latPlaceForm);
-        latLon.setLon(lonPlaceForm);
-
-        // добавляем новое место в бд
-        setLatLonToTheDBUseCase.execute(latLon, new DisposableObserver<Void>() {
-            @Override
-            public void onNext(@NonNull Void aVoid) {
-
-            }
-            @Override
-            public void onError(@NonNull Throwable e) {
-                // грустное уведомление :(
-                ToastMessage.showToast(placeFormActivity, TOAST_ADD_DELETE_PLACE_PUSH_MISTAKE);
-            }
-            @Override
-            public void onComplete() {
-                // радостное уведомление :)
-                ToastMessage.showToast(placeFormActivity, TOAST_ADD_DELETE_PLACE_PUSH);
-
-                // обновляем пейджер
-                List<Fragment> fragments = adapter.getmFragmentList();
-                fragments.add(PlaceFormPageFragment
-                        .newInstance(placeFormActivity.getSupportFragmentManager(),
-                                latPlaceForm, lonPlaceForm, cityPlaceForm));
-                adapter.setmFragmentList(fragments);
-                adapter.notifyDataSetChanged();
-
-                state_add.set(STATE_ADD.DELETE);
-            }
-        });
-
-    }
-
-    public void deleteFragment() {
-
-        // если в бд хоть что-то есть
-        if (fragmentsFromDatabase.size()>1) {
-
-            System.out.println("EEEEE "+fragmentsFromDatabase.size());
-
-            ArrayList<LatLon> fragmentsFromDBTry = fragmentsFromDatabase;
-
-            // перекопируем все по очереди в копии из бд до конца, последнюю затираем
-            for (int i=fragmentsFromDBTry.size()-currentPage+1;
-                 i<fragmentsFromDBTry.size();i++) {
-                fragmentsFromDBTry.get(i).setId(fragmentsFromDBTry.get(i).getId()-1);
-            }
-            fragmentsFromDBTry.remove(fragmentsFromDBTry.size()-currentPage);
-
-            setArrayLatLonToTheDBWheneDeleteUseCase.execute(fragmentsFromDBTry,
-                    new DisposableObserver<Void>() {
-                @Override
-                public void onNext(@NonNull Void aVoid) {
-
-                }
-
-                @Override
-                public void onError(@NonNull Throwable e) {
-                    ToastMessage.showToast(placeFormActivity, TOAST_ADD_DELETE_PLACE_PULL_MISTAKE);
-                }
-
-                @Override
-                public void onComplete() {
-                    List<Fragment> latLons = adapter.getmFragmentList();
-                    for(int i=1;i<currentPage-1;i++)
-                        fragmentsFromDatabase.get(i).setId(fragmentsFromDatabase.get(i).getId()-1);
-                    latLons.remove(currentPage-1);
-                    adapter.setmFragmentList(latLons);
-                    adapter.notifyDataSetChanged();
-
-                    ToastMessage.showToast(placeFormActivity, TOAST_ADD_DELETE_PLACE_PULL);
-                }
-            });
-
-
-
-
-
-        }else
-            ToastMessage.showToast(placeFormActivity, TOAST_ADD_DELETE_PLACE_PULL_EMPTY);
-
-
+        closeLastFragment();
+        state_search.set(STATE_SEARCH.SEARCH);
         state_add.set(STATE_ADD.ADD);
     }
+// --------------------------------------------------
 
+
+
+
+// --------------------------------------------------НАСТРОЙКИ
     // НАЖАТИЕ НАСТРОЙКИ
     public void inflateSettingsFragment() {
         testStateSearch();
@@ -321,35 +442,96 @@ public class PlaceFormViewModel implements BaseViewModel {
                 PlaceFormSettingsFragment
                         .newInstance(placeFormActivity.getSupportFragmentManager()),
                 true, R.id.containerSettings);
+
+
         state_settings.set(STATE_SETTINGS.ON);
     }
-
     // НАЖАТИЕ СКРЫТЬ НАСТРОЙКИ
     public void deflateSettingsFragment() {
         closeLastFragment();
         state_settings.set(STATE_SETTINGS.OFF);
     }
+// --------------------------------------------------
 
+
+
+
+
+
+
+
+
+
+
+// --------------------------------------------------
     // НАЖАТИЕ КНОПКИ ТЕКУЩАЯ ГЕОЛОКАЦИЯ
     public void getMyLocality() {
 
         Location myLastLocation = myLocality.getLastLocation();
         if (myLastLocation != null) {
-            ToastMessage.showToast(placeFormActivity, TOAST_MY_LOCATION_PUSH);
-            testStateSettings();
-            testStateSearch();
 
             // заполняем инфой соотв поля нового места
-            PlaceFormViewModel.cityPlaceForm = EMPTY_PLACE;
-            PlaceFormViewModel.latPlaceForm = String.valueOf(myLastLocation.getLatitude());
-            PlaceFormViewModel.lonPlaceForm = String.valueOf(myLastLocation.getLongitude());
+            cityPlaceForm = EMPTY_PLACE;
+            latPlaceForm = String.valueOf(myLastLocation.getLatitude());
+            lonPlaceForm = String.valueOf(myLastLocation.getLongitude());
 
-        } else {
+            if (!fragments2.isEmpty()) {
+                // если заходим из поиска - создаем страницу для поиска
+                ArrayList<Fragment> fragments = new ArrayList<>();
+                ArrayList<LatLon> latLons = new ArrayList<>();
+
+                // если небыло -1 пейджа - создаем и помечаем откуда начинать копировать далее
+                int ii = 1;
+                if (fragments2.get(0).getId() != -1)
+                    ii = 0;
+
+                fragments.add(PlaceFormPageFragment
+                        .newInstance(placeFormActivity.getSupportFragmentManager(),
+                                -1, latPlaceForm, lonPlaceForm, cityPlaceForm));
+                // добавляем первым в массив LatLon-ов
+                LatLon latLon = new LatLon();
+                latLon.setId(-1);
+                latLon.setCity(cityPlaceForm);
+                latLon.setLat(latPlaceForm);
+                latLon.setLon(lonPlaceForm);
+                latLons.add(latLon);
+
+                // заполняем коллекции фрагментов из памяти
+                for (int i = ii; i < fragments2.size(); i++) {
+                    fragments.add(PlaceFormPageFragment
+                            .newInstance(placeFormActivity.getSupportFragmentManager(),
+                                    fragments2.get(i).getId(),
+                                    fragments2.get(i).getLat(),
+                                    fragments2.get(i).getLon(),
+                                    fragments2.get(i).getCity()));
+                    latLons.add(fragments2.get(i));
+                }
+
+                fragments2.clear();
+                for (int i = 0; i < latLons.size(); i++)
+                    fragments2.add(latLons.get(i));
+
+
+                // заполняем и обновляем пейджер данными
+                adapter.setFragmentList(fragments);
+                adapter.notifyDataSetChanged();
+                pager.setAdapter(adapter);
+
+            }
+            // меняем статус кнопки на "удалить"
+            state_add.set(STATE_ADD.ADD);
+            testStateSettings();
+            testStateSearch();
+            ToastMessage.showToast(placeFormActivity, TOAST_MY_LOCATION_PUSH);
+        } else
             ToastMessage.showToast(placeFormActivity, PERMISSION_RATIONAL);
-        }
     }
+// --------------------------------------------------
 
 
+
+
+    // --------------------------------------------------Управление фрагментами
     private void testStateSettings() {
         if (state_settings.get() == STATE_SETTINGS.ON) {
             closeLastFragment();
@@ -364,7 +546,6 @@ public class PlaceFormViewModel implements BaseViewModel {
         }
     }
 
-
     private void closeLastFragment() {
         try {
             placeFormActivity.getSupportFragmentManager().popBackStack();
@@ -372,6 +553,6 @@ public class PlaceFormViewModel implements BaseViewModel {
             Log.e("Exception", "No fragment");
         }
     }
-
+// --------------------------------------------------
 
 }

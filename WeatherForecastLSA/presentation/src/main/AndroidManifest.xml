@@ -30,9 +30,10 @@
         </activity>
 
 
-        <activity android:name=".inLocality.InLocalityActivity" />
-        <activity android:name=".myPlaces.MyPlacesActivity" />
-        <activity android:name=".PlaceForm.PlaceFormActivity" />
+        <activity android:name=".myPlaces.MyPlacesActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".PlaceForm.PlaceFormActivity"
+            android:launchMode="singleTask"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
@@ -41,6 +42,9 @@
         android:name="com.google.android.geo.API_KEY"
         android:value="@string/mapKey" />
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a3b6eb242e6251209f0ef48e8e8f510f4b1b6642" />
     </application>
 
 </manifest>

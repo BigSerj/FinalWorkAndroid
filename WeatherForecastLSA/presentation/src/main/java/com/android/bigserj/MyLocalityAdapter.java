@@ -20,13 +20,13 @@ import static com.android.bigserj.Constants.PERMISSION_RATIONAL;
 import static com.android.bigserj.Constants.REQUEST_PERMISSIONS_REQUEST_CODE;
 import static com.bumptech.glide.gifdecoder.GifHeaderParser.TAG;
 
-public class MyLocality {
+public class MyLocalityAdapter {
 
-    Activity myLocalityActivity;
+    private Activity myLocalityActivity;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location myLastLocation;
 
-    public MyLocality(Activity myLocalityActivity) {
+    public MyLocalityAdapter(Activity myLocalityActivity) {
         this.myLocalityActivity = myLocalityActivity;
         init();
     }

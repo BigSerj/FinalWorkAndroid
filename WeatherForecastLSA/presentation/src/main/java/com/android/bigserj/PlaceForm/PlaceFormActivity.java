@@ -11,19 +11,21 @@ import com.android.bigserj.R;
 import com.android.bigserj.base.BaseAppCompatActivity;
 import com.android.bigserj.databinding.ActivityPlaceformBinding;
 
-public class PlaceFormActivity extends BaseAppCompatActivity {
+public class PlaceFormActivity extends BaseAppCompatActivity implements OnTouchSearchListener,
+        OnChangeCityListener{
 
+    PlaceFormViewModel placeFormViewModel;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
 
-        PlaceFormViewModel viewModel = new PlaceFormViewModel(this);
-        this.viewModel = viewModel;
+        placeFormViewModel = new PlaceFormViewModel(this);
+        this.viewModel = placeFormViewModel;
 
         ActivityPlaceformBinding binding =
                 DataBindingUtil.setContentView(this, R.layout.activity_placeform);
 
-        binding.setViewModel(viewModel);
+        binding.setViewModel(placeFormViewModel);
 
         super.onCreate(savedInstanceState);
 
@@ -38,5 +40,13 @@ public class PlaceFormActivity extends BaseAppCompatActivity {
         fragmentTransaction.setTransition(2).commit();
     }
 
-}
+    @Override
+    public void onTouchSearch() {
+        placeFormViewModel.onTouchSearch();
+    }
 
+    @Override
+    public void onChangeCity(String city) {
+        placeFormViewModel.onChangeCity(city);
+    }
+}

@@ -15,12 +15,12 @@ import static com.android.bigserj.Constants.*;
 
 public class PlaceFormPageFragment extends BaseFragment {
 
-    private FragmentPageBinding binding;
+    FragmentPageBinding binding;
     private PlaceFormPageViewModel placeFormPageViewModel;
 
 
     public static PlaceFormPageFragment newInstance(FragmentManager manager,
-                                                    String lat,String lon, String city) {
+                                                    Integer id,String lat,String lon, String city) {
 
         Fragment fragment = manager.findFragmentByTag(PlaceFormPageFragment.class.getName());
         PlaceFormPageFragment placeFormPageFragment;
@@ -30,6 +30,7 @@ public class PlaceFormPageFragment extends BaseFragment {
         else {
             placeFormPageFragment = new PlaceFormPageFragment();
             Bundle bundle = new Bundle();
+            bundle.putInt(PUT_EXTRA_ID, id);
             bundle.putString(PUT_EXTRA_LAT, lat);
             bundle.putString(PUT_EXTRA_LON, lon);
             bundle.putString(PUT_EXTRA_PLACE_NAME, city);
@@ -48,7 +49,7 @@ public class PlaceFormPageFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         Bundle bundle = getArguments();
         if (bundle != null) {
-//            placeFormPageViewModel.pageNumber = Integer.valueOf(bundle.getString(PUT_EXTRA_PAGE));
+            placeFormPageViewModel.id = bundle.getInt(PUT_EXTRA_ID);
             placeFormPageViewModel.lat = bundle.getString(PUT_EXTRA_LAT);
             placeFormPageViewModel.lon = bundle.getString(PUT_EXTRA_LON);
             placeFormPageViewModel.city = bundle.getString(PUT_EXTRA_PLACE_NAME);
@@ -73,4 +74,6 @@ public class PlaceFormPageFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+
+
 }

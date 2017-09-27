@@ -1,31 +1,372 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="android.view.View" />
+
+        <import type="com.android.bigserj.SettingsHelper.STATE_TEMP" />
+        <import type="com.android.bigserj.SettingsHelper.STATE_PRESSURE" />
+        <import type="com.android.bigserj.SettingsHelper.STATE_WIND" />
 
         <variable
             name="viewModel"
             type="com.android.bigserj.PlaceForm.PlaceFormSettingsViewModel" />
     </data>
 
-    <ScrollView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/settings">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+        <View
+            android:id="@+id/celsiusClick"
+            android:onClick="@{() -> viewModel.setCelsius()}"
+            android:layout_width="348dp"
+            android:layout_height="71dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0" />
+        <ImageView
+            android:id="@+id/celsius"
+            android:background="@drawable/celsium5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.792"
+            app:layout_constraintVertical_bias="0.015">
+        </ImageView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OPAOPAOPAOPA"
-                android:textColor="@color/white"
-                />
+        <View
+            android:id="@+id/fahrenheitClick"
+            android:onClick="@{() -> viewModel.setFahrenheit()}"
+            android:layout_width="350dp"
+            android:layout_height="77dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.158" />
+        <ImageView
+            android:id="@+id/fahrenheit"
+            android:background="@drawable/fahrenheit5"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.792"
+            app:layout_constraintVertical_bias="0.173">
+
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/celsius_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_temp==STATE_TEMP.CELSIUS ? View.VISIBLE : View.GONE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.015">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/fahrenheit_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_temp==STATE_TEMP.CELSIUS ? View.GONE : View.VISIBLE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.173">
+        </ImageView>
 
 
-        </LinearLayout>
-    </ScrollView>
+
+        <View
+            android:id="@+id/redLine1"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="@color/orange"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintVertical_bias="0.306"
+            app:layout_constraintHorizontal_bias="0.0" />
+
+
+
+        <View
+            android:id="@+id/pressure_mmClick"
+            android:onClick="@{() -> viewModel.setPressureMMOfMercury()}"
+            android:layout_width="350dp"
+            android:layout_height="83dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.395" />
+        <ImageView
+            android:id="@+id/pressure_mm"
+            android:background="@drawable/barometer_mm_mercury"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.792"
+            app:layout_constraintVertical_bias="0.411">
+        </ImageView>
+
+        <View
+            android:id="@+id/pressure_mBaClick"
+            android:onClick="@{() -> viewModel.setPressureMilliBars()}"
+            android:layout_width="348dp"
+            android:layout_height="86dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.576" />
+        <ImageView
+            android:id="@+id/pressure_mBa"
+            android:background="@drawable/barometer_mbars"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.792"
+            app:layout_constraintVertical_bias="0.562">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/pressure_mm_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_pressure==STATE_PRESSURE.MILLIMETERS_OF_MERCURY ? View.VISIBLE : View.GONE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.411">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/pressure_mBa_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_pressure==STATE_PRESSURE.MILLIMETERS_OF_MERCURY ? View.GONE : View.VISIBLE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.562">
+        </ImageView>
+
+
+
+        <View
+            android:id="@+id/redLine2"
+            android:layout_width="0dp"
+            android:layout_height="3dp"
+            android:background="@color/orange"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintVertical_bias="0.664" />
+
+
+
+        <View
+            android:id="@+id/wind_msClick"
+            android:onClick="@{() -> viewModel.setWindMetersPerSeconds()}"
+            android:layout_width="350dp"
+            android:layout_height="83dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.801" />
+        <TextView
+            android:id="@+id/wind_ms"
+            android:text="m/s"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingTop="13dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.848"
+            app:layout_constraintVertical_bias="0.79">
+        </TextView>
+
+        <View
+            android:id="@+id/wind_kmhClick"
+            android:onClick="@{() -> viewModel.setWindKilometersPerHour()}"
+            android:layout_width="350dp"
+            android:layout_height="83dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.982" />
+        <TextView
+            android:id="@+id/wind_kmh"
+            android:text="km/h"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:paddingTop="13dp"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.848"
+            app:layout_constraintVertical_bias="0.944">
+
+        </TextView>
+
+        <ImageView
+            android:id="@+id/wind_ms_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_wind==STATE_WIND.M_PER_SEC ? View.VISIBLE : View.GONE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.79">
+        </ImageView>
+
+        <ImageView
+            android:id="@+id/wind_kmh_check"
+            android:background="@drawable/ic_check_black_24dp"
+            android:visibility="@{viewModel.state_wind==STATE_WIND.M_PER_SEC ? View.GONE : View.VISIBLE}"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="8dp"
+            app:layout_constraintHorizontal_bias="0.414"
+            app:layout_constraintVertical_bias="0.944">
+        </ImageView>
+
+
+    </android.support.constraint.ConstraintLayout>
 </layout>

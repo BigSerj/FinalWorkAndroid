@@ -21,10 +21,10 @@ public class GetSizeDBUseCase extends UseCase<Void,ArrayList<LatLon>> {
             @Override
             public void subscribe(@NonNull ObservableEmitter<ArrayList<LatLon>> e) throws Exception {
                 RealmService realmService = new RealmService();
-                ArrayList<LatLon> arrayOfLatLonDomain = new ArrayList<>();
                 ArrayList<com.android.bigserj.data.entity.LatLon> listLLData =
                         realmService.getAllLatLon();
-                // перекопирываем из дата в домен ентити
+                ArrayList<LatLon> arrayOfLatLonDomain = new ArrayList<>();
+                // делаем копию из дата в домен ентити
                 for (int i=0;i<listLLData.size();i++){
                     LatLon latLonDomain = new LatLon();
                     latLonDomain.setId(listLLData.get(i).getId());

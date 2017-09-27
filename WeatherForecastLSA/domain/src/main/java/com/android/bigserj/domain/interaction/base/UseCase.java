@@ -21,8 +21,9 @@ public abstract class UseCase<InParam, OutParam> {
     }
 
     public void dispose() {
-        if(!disposable.isDisposed() && disposable != null)
-            disposable.dispose();
+        if(disposable != null)
+            if(!disposable.isDisposed())
+                disposable.dispose();
     }
 
 }

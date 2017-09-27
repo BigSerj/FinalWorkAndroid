@@ -32,6 +32,7 @@ public class GetDataOnTheLocalityUseCase extends UseCase<String, DataOnTheLocali
                         dataOnTheLocalityModel.setObservationTime(dataOnTheLocality.getObservationTime());
                         dataOnTheLocalityModel.setWeather(dataOnTheLocality.getWeather());
                         dataOnTheLocalityModel.setTempC(dataOnTheLocality.getTempC());
+                        dataOnTheLocalityModel.setTempF(dataOnTheLocality.getTempF());
                         dataOnTheLocalityModel.setTempCFeelsLike(dataOnTheLocality.getTempCFeelsLike());
                         dataOnTheLocalityModel.setPressure_mb(dataOnTheLocality.getPressure_mb());
                         dataOnTheLocalityModel.setHumidity(dataOnTheLocality.getHumidity());

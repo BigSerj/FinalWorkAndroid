@@ -1,7 +1,6 @@
 package com.android.bigserj.PlaceForm;
 
 
-import android.content.Intent;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -14,7 +13,6 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 
 import static android.content.ContentValues.TAG;
-import static com.android.bigserj.Constants.*;
 
 public class PlaceFormSearchViewModel implements BaseViewModelFragment,PlaceSelectionListener {
 
@@ -23,23 +21,28 @@ public class PlaceFormSearchViewModel implements BaseViewModelFragment,PlaceSele
         this.placeFormSearchFragment = placeFormSearchFragment;
     }
 
+    private OnTouchSearchListener someEventListener;
 
     @Override
     public void onPlaceSelected(Place place) {
 
         // заполняем инфой соотв поля нового места
-        PlaceFormViewModel.cityPlaceForm = place.getName().toString();
+        PlaceFormViewModel.cityPlaceForm = String.valueOf(place.getName());
         PlaceFormViewModel.latPlaceForm = String.valueOf(place.getLatLng().latitude);
         PlaceFormViewModel.lonPlaceForm = String.valueOf(place.getLatLng().longitude);
-        // убираем фрагмент с выбором place
-        placeFormSearchFragment.getActivity().getSupportFragmentManager().popBackStack();
+
+
+        someEventListener.onTouchSearch();
     }
+
+
 
     @Override
     public void onError(Status status) {
         Log.e(TAG, "onError: Status = " + status.toString());
 
-        Toast.makeText(placeFormSearchFragment.getContext(), "Place selection failed: " + status.getStatusMessage(),
+        Toast.makeText(placeFormSearchFragment.getContext(), "Place selection failed: " +
+                        status.getStatusMessage(),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -48,7 +51,6 @@ public class PlaceFormSearchViewModel implements BaseViewModelFragment,PlaceSele
 
     @Override
     public void create() {
-
     }
 
     @Override
@@ -57,6 +59,14 @@ public class PlaceFormSearchViewModel implements BaseViewModelFragment,PlaceSele
 
     @Override
     public void viewCreated() {
+
+        try {
+            someEventListener = (OnTouchSearchListener) placeFormSearchFragment.getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException(placeFormSearchFragment.getActivity().toString() +
+                    " must implement OnTouchSearchListener");
+        }
+
         // инициализируем фрагмент поиска гугла
         SupportPlaceAutocompleteFragment autocompleteFragment = (SupportPlaceAutocompleteFragment)
                 placeFormSearchFragment

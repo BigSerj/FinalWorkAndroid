@@ -8,6 +8,12 @@
 
     <color name="darkBlue">#0c0d1e</color>
     <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="glassBlack">#3b000000</color>
+    <color name="glassBlack2">#07000000</color>
+
+
+    <color name="itemPlaces">#78ffffff</color>
 
     <color name="settingsBackground">#a8a7e8ff</color>
     <color name="pushButton">#51a7e8ff</color>
@@ -18,6 +24,8 @@
     <color name="mainBackgroundColor">#a7e8ff</color>
 
     <color name="grey">#a3a3a3</color>
+
+    <color name="orange">#ff7b00</color>
 
     <color name="Buttons">#143566</color>
     <color name="Buttons2">#2c314d</color>

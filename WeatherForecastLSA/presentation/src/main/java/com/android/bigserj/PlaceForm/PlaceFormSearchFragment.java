@@ -1,6 +1,7 @@
 package com.android.bigserj.PlaceForm;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import com.android.bigserj.databinding.FragmentPlaceFormSearchBinding;
 
 
 public class PlaceFormSearchFragment extends BaseFragment {
+
 
     private FragmentPlaceFormSearchBinding binding;
     private PlaceFormSearchViewModel placeFormSearchViewModel;
@@ -60,4 +62,7 @@ public class PlaceFormSearchFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
     }
+
+
+
 }

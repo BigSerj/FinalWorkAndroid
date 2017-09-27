@@ -19,6 +19,8 @@ public class Constants {
     public static final String TOAST_PLACE_FORM_NO_INTERNET = "No internet connection.";
     public static final String TOAST_PLACE_DATABASE_BUG = "There is some bug in a database.";
 
+    public static final String ADD_NEW_PLACE = "Add New Place.";
+
 
 
 
@@ -36,16 +38,38 @@ public class Constants {
     public static final String URL_GIF_CLOUDS = "https://cdn.pixabay.com/photo/2016/02/26/10/35/clouds-1223808_960_720.png";
 
 
+    // SHARED_PREFERENCES
+    public static final String SHARED_PREFERENCES_NAME = "pagesOnTheScreen";
+    public static final String SHAR_PREFS_FIRST_PAGE = "FIRST_PAGE";
 
-    public static final String PUT_EXTRA_PAGE = "PUT_EXTRA_PAGE";
+    public static final String CELSIUS_STATE = "CELSIUS_STATE";
+    public static final String FAHRENHEIT_STATE = "FAHRENHEIT_STATE";
+    public static final String SHAR_PREFS_STATE_TEMP = "STATE_TEMP";
+
+    public static final String MILLIMETERS_OF_MERCURY_STATE = "MILLIMETERS_OF_MERCURY_STATE";
+    public static final String MLLIBARS_STATE = "MLLIBARS_STATE";
+    public static final String SHAR_PREFS_STATE_PRESSURE = "STATE_PRESSURE";
+
+    public static final String MPS_STATE = "MPS_STATE";
+    public static final String KPH_STATE = "KPH_STATE";
+    public static final String SHAR_PREFS_STATE_WIND = "STATE_WIND";
+
+
+
+
+
+    public static final String PUT_EXTRA_ID = "PUT_EXTRA_ID";
     public static final String PUT_EXTRA_LAT = "PUT_EXTRA_LAT";
     public static final String PUT_EXTRA_LON = "PUT_EXTRA_LON";
     public static final String PUT_EXTRA_PLACE_NAME = "PUT_EXTRA_PLACE_NAME";
     public static final String PUT_EXTRA_PLACE_ADDRESS = "PUT_EXTRA_PLACE_ADDRESS";
     public static final String PUT_EXTRA_PLACE_ID = "PUT_EXTRA_PLACE_ID";
     public static final String EMPTY_PLACE = "EMPTY_PLACE";
+    public static final String PUT_EXTRA_SELECTED_PLACE_COUNT = "PUT_EXTRA_SELECTED_PLACE_COUNT";
 
     public static final int REQUEST_PERMISSIONS_REQUEST_CODE = 34;
+    public static final float COEFFICIENT_FOR_CONVERT_PRESSURE = (float) 0.75006375541921;
+    public static final float COEFFICIENT_FOR_CONVERT_WIND = (float) (5/18); // == 1000/3600
 
 
 

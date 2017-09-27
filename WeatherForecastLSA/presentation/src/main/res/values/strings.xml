@@ -2,9 +2,13 @@
     <string name="app_name">WeatherMeteoEarth</string>
     <string name="hintLocationMainActivity">Введите населенный пункт</string>
 
-    <string name="myPlacesButtonSearchMainActivity">Мои места</string>
-    <string name="textButtonSearchMainActivity">Поиск нового места</string>
-    <string name="gpsButtonSearchMainActivity">По текущему местоположению</string>
+    <string name="myPlacesButtonSearchMainActivity">My places</string>
+    <string name="textButtonSearchMainActivity">Search for a new location</string>
+    <string name="gpsButtonSearchMainActivity">By current location</string>
+
+    <string name="gpsButtonSearchMainActivityRu">По текущему местоположению</string>
+    <string name="myPlacesButtonSearchMainActivityRu">Мои места</string>
+    <string name="textButtonSearchMainActivityRu">Поиск нового места</string>
 
     <string name="backButton">Назад</string>
     <string name="backButton2">Поиск</string>
