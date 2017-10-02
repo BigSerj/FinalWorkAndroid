@@ -7,20 +7,25 @@
 
         <import type="android.view.View" />
 
-        <import type="com.android.bigserj.PlaceForm.PlaceFormPageViewModel.STATE_ABOUT_ZERO" />
-        <import type="com.android.bigserj.SettingsHelper.STATE_TEMP" />
-        <import type="com.android.bigserj.SettingsHelper.STATE_PRESSURE" />
-        <import type="com.android.bigserj.SettingsHelper.STATE_WIND" />
+        <import type="com.orangeTree.bigserj.PlaceForm.PlaceFormPageViewModel.STATE_ABOUT_ZERO" />
+        <import type="com.orangeTree.bigserj.PlaceForm.PlaceFormPageViewModel.STATE_WIND_SHOW" />
+        <import type="com.orangeTree.bigserj.SettingsHelper.STATE_TEMP" />
+        <import type="com.orangeTree.bigserj.SettingsHelper.STATE_PRESSURE" />
+        <import type="com.orangeTree.bigserj.SettingsHelper.STATE_WIND" />
 
         <variable
             name="viewModel"
-            type="com.android.bigserj.PlaceForm.PlaceFormPageViewModel" />
+            type="com.orangeTree.bigserj.PlaceForm.PlaceFormPageViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_bcgr_page">
+        android:onClick="@{() -> viewModel.closeAllFragments()}">
+        <!--android:background="@drawable/gradient_bcgr_page">-->
+
+
+
 
         <TextView
             android:id="@+id/textView"
@@ -36,17 +41,19 @@
             tools:layout_constraintLeft_creator="1" />
 
 
+
         <TextView
             android:id="@+id/text1"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:background="@color/darkBlue"
+            android:background="@color/white"
             android:gravity="center"
             android:paddingEnd="55dp"
             android:paddingStart="55dp"
             android:text="@{viewModel.cityName}"
+            android:textStyle="bold"
             android:textAllCaps="true"
-            android:textColor="@color/white"
+            android:textColor="@color/orange"
             android:textSize="20sp"
             android:visibility="visible"
             app:layout_constraintHorizontal_bias="0.0"
@@ -56,86 +63,62 @@
             tools:layout_constraintRight_creator="1"
             tools:layout_constraintLeft_creator="1" />
 
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:background="@drawable/ic_chevron_left_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/text1"
-            app:layout_constraintLeft_toLeftOf="@+id/text1"
-            app:layout_constraintTop_toTopOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_constraintTop_creator="1"
-            tools:layout_constraintBottom_creator="1" />
-
-        <ImageView
-            android:layout_width="50dp"
-            android:layout_height="0dp"
-            android:background="@drawable/ic_keyboard_arrow_right_black_24dp"
-            app:layout_constraintBottom_toBottomOf="@+id/text1"
-            app:layout_constraintRight_toRightOf="@+id/text1"
-            app:layout_constraintTop_toTopOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0"
-            tools:layout_constraintTop_creator="1"
-            tools:layout_constraintBottom_creator="1" />
-
-
-
 
         <!--plus-->
         <ImageView
             android:id="@+id/plusTempC"
             android:visibility="@{viewModel.state_about_zero==STATE_ABOUT_ZERO.PLUS ? View.VISIBLE : View.GONE}"
-            android:layout_width="0dp"
+            android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginStart="16dp"
             android:background="@drawable/plus"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="16dp"
             app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="33dp"
             app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.05"
-            app:layout_constraintRight_toLeftOf="@+id/tempNumb"
+            android:layout_marginRight="8dp"
             app:layout_constraintHorizontal_bias="1.0"
-            tools:layout_constraintRight_creator="1"
-            tools:layout_constraintLeft_creator="1" />
+            app:layout_constraintRight_toLeftOf="@+id/tempNumb"
+            app:layout_constraintBottom_toBottomOf="@+id/tempNumb"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginEnd="8dp" />
         <!--minus-->
         <ImageView
             android:id="@+id/minusTempC"
-            android:visibility="@{viewModel.state_about_zero==STATE_ABOUT_ZERO.MINUS ? View.VISIBLE : View.GONE}"
+            android:visibility="@{viewModel.state_about_zero==STATE_ABOUT_ZERO.MINUS? View.VISIBLE : View.GONE}"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginBottom="8dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
             android:background="@drawable/minus"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="@+id/plusTempC"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.05"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginRight="8dp"
             app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintRight_toLeftOf="@+id/tempNumb" />
+            app:layout_constraintTop_toBottomOf="@+id/text1"
+            app:layout_constraintRight_toLeftOf="@+id/tempNumb"
+            app:layout_constraintBottom_toBottomOf="@+id/tempNumb"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginEnd="8dp" />
         <!--temp-->
         <TextView
             android:id="@+id/tempNumb"
             android:textAlignment="center"
             android:layout_width="78dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="372dp"
             android:paddingTop="2sp"
             android:text="@{viewModel.temp}"
             android:textColor="@color/darkBlue"
             android:textSize="60sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginStart="51dp"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_marginLeft="180dp"
+            app:layout_constraintLeft_toLeftOf="@+id/imageViewWeather"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewWeather"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginStart="180dp" />
         <!--celsius-->
         <ImageView
             android:id="@+id/znakCels"
@@ -143,83 +126,146 @@
             android:visibility="@{viewModel.state_temp_page==STATE_TEMP.CELSIUS ? View.VISIBLE : View.GONE}"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="383dp"
             android:paddingTop="8sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/tempNumb"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/tempNumb"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintTop_toTopOf="@+id/tempNumb"
+            app:layout_constraintLeft_toRightOf="@+id/tempNumb" />
         <!--fahrenheit-->
         <ImageView
             android:id="@+id/znakFahr"
             android:background="@drawable/fahrenheit5"
-            android:visibility="@{viewModel.state_temp_page==STATE_TEMP.CELSIUS ? View.GONE : View.VISIBLE}"
+            android:visibility="@{viewModel.state_temp_page==STATE_TEMP.FAHRENHEIT ? View.VISIBLE : View.GONE}"
             android:layout_width="70dp"
             android:layout_height="70dp"
-            android:layout_marginBottom="383dp"
             android:paddingTop="8sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/tempNumb"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintBottom_toBottomOf="@+id/tempNumb"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintTop_toTopOf="@+id/tempNumb"
+            app:layout_constraintLeft_toRightOf="@+id/tempNumb"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/znakCels"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="8dp" />
+
+        <!--температура по ощущениям-->
+        <TextView
+            android:id="@+id/tempFeelsLike"
+            android:gravity="bottom"
+            android:layout_width="96dp"
+            android:layout_height="16dp"
+            android:textSize="12sp"
+            android:textStyle="italic"
+            android:text="sensation:"
+            android:textColor="@color/staticText"
+            app:layout_constraintTop_toBottomOf="@+id/tempNumb"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewWeather"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="52dp"
+            app:layout_constraintLeft_toLeftOf="@+id/tempNumb"
+            app:layout_constraintRight_toLeftOf="@+id/znakFahr"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginStart="52dp" />
+
+        <!--plus-->
+        <ImageView
+            android:id="@+id/plusSmallTempC"
+            android:visibility="@{viewModel.state_about_zero_FeelsLike_==STATE_ABOUT_ZERO.PLUS ? View.VISIBLE : View.GONE}"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/plus"
+            app:layout_constraintTop_toTopOf="@+id/tempSmallNumb"
+            android:layout_marginTop="4dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tempSmallNumb"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintRight_toLeftOf="@+id/tempSmallNumb" />
+        <!--minus-->
+        <ImageView
+            android:id="@+id/minusSmallTempC"
+            android:visibility="@{viewModel.state_about_zero_FeelsLike_==STATE_ABOUT_ZERO.MINUS? View.VISIBLE : View.GONE}"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:background="@drawable/minus"
+            app:layout_constraintTop_toTopOf="@+id/tempSmallNumb"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/tempSmallNumb"
+            app:layout_constraintVertical_bias="1.0"
+            app:layout_constraintRight_toLeftOf="@+id/tempSmallNumb" />
+        <!--tempSmall-->
+        <TextView
+            android:id="@+id/tempSmallNumb"
+            android:gravity="top"
+            android:textAlignment="center"
+            android:layout_width="39dp"
+            android:layout_height="35dp"
+            android:text="@{viewModel.tempFeelsLike}"
+            android:textColor="@color/darkBlue"
+            android:textSize="30sp"
+            app:layout_constraintRight_toRightOf="@+id/tempFeelsLike"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewWeather"
+            app:layout_constraintTop_toBottomOf="@+id/tempFeelsLike"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/tempFeelsLike"
+            app:layout_constraintHorizontal_bias="1.0" />
+
+
+
+
+
+
+
+
+
+
         <!--url-->
         <ImageView
             android:id="@+id/urlWeather"
             android:foregroundGravity="center"
-            android:layout_width="135dp"
-            android:layout_height="119dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:paddingTop="8sp"
             android:textStyle="bold"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="334dp"
             tools:layout_constraintRight_creator="1"
-            android:layout_marginStart="9dp"
-            android:layout_marginEnd="17dp"
             tools:layout_constraintLeft_creator="1"
-            android:layout_marginRight="16dp"
-            android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintBottom_toTopOf="@+id/imageViewWeather"
+            app:layout_constraintLeft_toLeftOf="@+id/imageViewWeather"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/imageViewWeather"
             android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="1.0" />
-
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp" />
 
 
         <!--влажность-->
         <TextView
             android:id="@+id/humidity"
-            android:textAlignment="center"
-            android:layout_width="90dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:paddingTop="12sp"
             android:textSize="15sp"
             android:textStyle="italic"
             android:text="humidity:"
-            android:textColor="@color/darkBlue"
+            android:textColor="@color/staticText"
             android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
+            app:layout_constraintTop_toBottomOf="@+id/imageViewWeather"
             android:layout_marginRight="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.471"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="0.031"
-            app:layout_constraintRight_toRightOf="parent" />
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/imageViewWeather"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginEnd="8dp" />
         <!--значение влажности-->
         <TextView
             android:id="@+id/humidityObj"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:layout_width="66dp"
             android:layout_height="40dp"
             android:paddingTop="7sp"
@@ -229,24 +275,23 @@
             android:textColor="@color/darkBlue"
             app:layout_constraintLeft_toRightOf="@+id/humidity"
             app:layout_constraintTop_toTopOf="@+id/humidity"
-            android:layout_marginTop="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/humidity"
             android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="-14dp" />
         <!--процент-->
         <!--давление-->
         <TextView
             android:id="@+id/pressure"
-            android:textAlignment="center"
-            android:layout_width="90dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:paddingTop="12sp"
             android:textSize="15sp"
             android:textStyle="italic"
             android:text="pressure:"
-            android:textColor="@color/darkBlue"
-            app:layout_constraintHorizontal_bias="0.059"
-            app:layout_constraintLeft_toLeftOf="parent"
+            android:textColor="@color/staticText"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/imageViewWeather"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="16dp"
@@ -255,7 +300,7 @@
         <!--значение давления-->
         <TextView
             android:id="@+id/pressureObj"
-            android:textAlignment="center"
+            android:textAlignment="textStart"
             android:layout_width="66dp"
             android:layout_height="40dp"
             android:paddingTop="7sp"
@@ -263,49 +308,46 @@
             android:textStyle="italic"
             android:text="@{viewModel.pressure}"
             android:textColor="@color/darkBlue"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintTop_toTopOf="@+id/pressure"
             app:layout_constraintBottom_toBottomOf="@+id/pressure"
-            android:layout_marginBottom="0dp"
             app:layout_constraintLeft_toRightOf="@+id/pressure"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginLeft="-14dp" />
         <!--ед изм давления мм рт ст-->
         <TextView
             android:id="@+id/pressureMMOfMercury"
-            android:visibility="@{viewModel.state_pressure_page==STATE_PRESSURE.MILLIBARS ? View.GONE : View.VISIBLE}"
-            android:textAlignment="center"
-            android:layout_width="90dp"
+            android:visibility="@{viewModel.state_pressure_page==STATE_PRESSURE.MILLIMETERS_OF_MERCURY ? View.VISIBLE : View.GONE}"
+            android:textAlignment="textStart"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:paddingTop="11sp"
             android:textSize="15sp"
             android:textStyle="italic"
             android:text="mmHg."
-            android:textColor="@color/darkBlue"
+            android:textColor="@color/staticText"
             app:layout_constraintTop_toTopOf="@+id/pressureObj"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/pressureObj"
-            android:layout_marginBottom="0dp"
             app:layout_constraintLeft_toRightOf="@+id/pressureObj"
             app:layout_constraintVertical_bias="1.0" />
-
+        <!--ед изм давления mmilliBars-->
         <TextView
             android:id="@+id/pressureMillibars"
             android:visibility="@{viewModel.state_pressure_page==STATE_PRESSURE.MILLIBARS ? View.VISIBLE : View.GONE}"
-            android:textAlignment="center"
-            android:layout_width="90dp"
+            android:textAlignment="textStart"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:paddingTop="11sp"
             android:textSize="15sp"
             android:textStyle="italic"
             android:text="mb"
-            android:textColor="@color/darkBlue"
+            android:textColor="@color/staticText"
             app:layout_constraintTop_toTopOf="@+id/pressureObj"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/pressureObj"
-            android:layout_marginBottom="0dp"
             app:layout_constraintLeft_toRightOf="@+id/pressureObj"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="-8dp" />
 
 
         <!--WEATHER-->
@@ -333,47 +375,80 @@
         <!--направление ветра-->
         <ImageView
             android:id="@+id/viewWind"
+            android:src="@drawable/vane"
+            android:rotation="@{viewModel.windDirection}"
+            android:visibility="@{viewModel.state_wind_show==STATE_WIND_SHOW.YES ? View.VISIBLE : View.GONE}"
             android:textAlignment="center"
             android:textStyle="italic"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintHorizontal_bias="0.943"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             tools:layout_constraintTop_creator="1"
             tools:layout_constraintBottom_creator="1"
-            android:layout_marginTop="222dp"
-            app:layout_constraintTop_toBottomOf="@+id/text1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintVertical_bias="0.141">
-
+            app:layout_constraintTop_toTopOf="@+id/windSpeed"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/windSpeed"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginStart="136dp"
+            android:layout_marginLeft="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/windSpeedObj">
         </ImageView>
+
+        <ImageView
+            android:id="@+id/viewWindNO"
+            android:src="@drawable/sad_face"
+            android:rotation="@{viewModel.windDirection}"
+            android:visibility="@{viewModel.state_wind_show==STATE_WIND_SHOW.NO ? View.VISIBLE : View.GONE}"
+            android:textAlignment="center"
+            android:textStyle="italic"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            app:layout_constraintTop_toTopOf="@+id/windSpeed"
+            app:layout_constraintBottom_toBottomOf="@+id/windSpeed"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginStart="136dp"
+            app:layout_constraintLeft_toLeftOf="@+id/windSpeedObj"
+            android:layout_marginLeft="136dp" />
+
+        <TextView
+            android:id="@+id/windDir"
+            android:paddingTop="12sp"
+            android:textSize="15sp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="@{viewModel.windDir}"
+            android:textColor="@color/darkBlue"
+            android:layout_marginLeft="176dp"
+            app:layout_constraintLeft_toLeftOf="@+id/windSpeedObj"
+            app:layout_constraintTop_toTopOf="@+id/windSpeed"
+            app:layout_constraintBottom_toBottomOf="@+id/windSpeed"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0"
+            android:layout_marginStart="176dp" />
+
+
         <!--скорость ветра-->
         <TextView
             android:id="@+id/windSpeed"
-            android:textAlignment="center"
-            android:layout_width="130dp"
+            android:layout_width="70dp"
             android:layout_height="40dp"
             android:paddingTop="12sp"
             android:textSize="15sp"
             android:textStyle="italic"
-            android:text="speed of wind:"
-            android:textColor="@color/darkBlue"
+            android:text="wind:"
+            android:textColor="@color/staticText"
             app:layout_constraintTop_toBottomOf="@+id/pressure"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
             app:layout_constraintVertical_bias="0.0"
-            android:layout_marginLeft="8dp"
-            app:layout_constraintLeft_toLeftOf="parent"
-            android:layout_marginRight="8dp"
+            app:layout_constraintLeft_toLeftOf="@+id/imageViewWeather"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintHorizontal_bias="0.037" />
+            app:layout_constraintHorizontal_bias="0.0" />
         <!--значение скорости ветра-->
         <TextView
             android:id="@+id/windSpeedObj"
-            android:textAlignment="center"
-            android:layout_width="50dp"
+            android:textAlignment="textStart"
+            android:layout_width="66dp"
             android:layout_height="40dp"
             android:paddingTop="7sp"
             android:textSize="20sp"
@@ -383,69 +458,105 @@
             app:layout_constraintTop_toTopOf="@+id/windSpeed"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/windSpeed"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintVertical_bias="1.0"
             app:layout_constraintLeft_toRightOf="@+id/windSpeed"
-            android:layout_marginLeft="-9dp" />
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="-7dp" />
         <!--мм рт ст-->
         <TextView
             android:id="@+id/windSpeedMPS"
-            android:visibility="@{viewModel.state_wind_page==STATE_WIND.M_PER_SEC ? View.VISIBLE : View.GONE}"
-            android:textAlignment="center"
-            android:layout_width="50dp"
+            android:visibility="@{viewModel.state_wind_page==STATE_WIND.M_PER_HOUR ? View.VISIBLE : View.GONE}"
+            android:textAlignment="textStart"
+            android:layout_width="70dp"
             android:layout_height="40dp"
-            android:paddingTop="7sp"
-            android:textSize="20sp"
+            android:paddingTop="12sp"
+            android:textSize="15sp"
             android:textStyle="italic"
-            android:text="m/s"
-            android:textColor="@color/darkBlue"
+            android:text="mp/h"
+            android:textColor="@color/staticText"
             app:layout_constraintLeft_toRightOf="@+id/windSpeedObj"
             app:layout_constraintTop_toTopOf="@+id/windSpeedObj"
             android:layout_marginTop="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/windSpeedObj"
-            android:layout_marginBottom="0dp"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="-7dp" />
         <!--миллибаарс-->
         <TextView
             android:id="@+id/windSpeedKPH"
-            android:visibility="@{viewModel.state_wind_page==STATE_WIND.M_PER_SEC ? View.GONE : View.VISIBLE}"
-            android:textAlignment="center"
-            android:layout_width="50dp"
+            android:visibility="@{viewModel.state_wind_page==STATE_WIND.KM_PER_HOUR ? View.VISIBLE : View.GONE}"
+            android:textAlignment="textStart"
+            android:layout_width="70dp"
             android:layout_height="40dp"
-            android:paddingTop="7sp"
-            android:textSize="20sp"
+            android:paddingTop="12sp"
+            android:textSize="15sp"
             android:textStyle="italic"
             android:text="km/h"
-            android:textColor="@color/darkBlue"
-            app:layout_constraintLeft_toLeftOf="@+id/windSpeedMPS"
-            app:layout_constraintBottom_toBottomOf="@+id/windSpeedObj"
-            android:layout_marginBottom="8dp"
+            android:textColor="@color/staticText"
             app:layout_constraintTop_toTopOf="@+id/windSpeedObj"
-            android:layout_marginTop="0dp"
-            app:layout_constraintVertical_bias="0.0" />
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/windSpeedObj"
+            app:layout_constraintLeft_toLeftOf="@+id/windSpeedMPS"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginLeft="-7dp" />
 
         <!--время-->
-
         <TextView
-            android:id="@+id/timeVal"
-            android:layout_width="183dp"
-            android:layout_height="53dp"
-            android:paddingTop="3sp"
-            android:textSize="20sp"
+            android:id="@+id/timeText"
+            android:textAlignment="center"
+            android:gravity="bottom"
+            android:layout_width="120dp"
+            android:layout_height="30dp"
+            android:textSize="12sp"
             android:textStyle="italic"
-            android:text="@{viewModel.time}"
-            android:textColor="@color/darkBlue"
-            app:layout_constraintRight_toRightOf="parent"
-            android:layout_marginEnd="161dp"
-            android:layout_marginRight="8dp"
+            android:text="last dimension:"
+            android:textColor="@color/staticText"
+            android:layout_marginLeft="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="403dp"
             app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@+id/imageViewWeather"
+            app:layout_constraintHorizontal_bias="0.0"
             android:layout_marginTop="8dp"
             app:layout_constraintTop_toBottomOf="@+id/text1"
+            app:layout_constraintVertical_bias="1.0"
+            android:layout_marginStart="16dp" />
+        <!--// день недели и время-->
+        <TextView
+            android:id="@+id/timeVal1"
+            android:textAlignment="center"
+            android:layout_width="120dp"
+            android:layout_height="20dp"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:text="@{viewModel.timeDate}"
+            android:textColor="@color/darkBlue"
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginBottom="8dp"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintVertical_bias="0.193" />
-
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/timeText"
+            app:layout_constraintLeft_toLeftOf="@+id/timeText"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/timeText"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="8dp" />
+        <!--дата-->
+        <TextView
+            android:id="@+id/timeVal2"
+            android:textAlignment="center"
+            android:layout_width="120dp"
+            android:layout_height="20dp"
+            android:textSize="15sp"
+            android:textStyle="italic"
+            android:text="@{viewModel.timeDayTime}"
+            android:textColor="@color/darkBlue"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="8dp"
+            app:layout_constraintVertical_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/timeVal1"
+            app:layout_constraintLeft_toLeftOf="@+id/timeVal1"
+            android:layout_marginRight="8dp"
+            app:layout_constraintRight_toRightOf="@+id/timeText"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:layout_marginEnd="8dp" />
 
 
 

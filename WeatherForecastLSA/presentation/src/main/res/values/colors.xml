@@ -4,32 +4,22 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="hintColor">#3d0009ba</color>
-
     <color name="darkBlue">#0c0d1e</color>
     <color name="white">#ffffff</color>
+
     <color name="black">#000000</color>
     <color name="glassBlack">#3b000000</color>
-    <color name="glassBlack2">#07000000</color>
+
+    <color name="staticText">#8b000000</color>
 
 
-    <color name="itemPlaces">#78ffffff</color>
-
-    <color name="settingsBackground">#a8a7e8ff</color>
     <color name="pushButton">#51a7e8ff</color>
 
-    <color name="textColorMainActivity">#6a003acc</color>
-    <color name="toolBarMainActivity">#cefff200</color>
-
-    <color name="mainBackgroundColor">#a7e8ff</color>
-
-    <color name="grey">#a3a3a3</color>
-
     <color name="orange">#ff7b00</color>
+    <color name="button5">#fae4e4e4</color>
+    <color name="salat">#ffffff</color>
 
-    <color name="Buttons">#143566</color>
-    <color name="Buttons2">#2c314d</color>
-    <color name="Buttons3">#242a4e</color>
+
     <color name="textButton">#ffc9a5</color>
 
     

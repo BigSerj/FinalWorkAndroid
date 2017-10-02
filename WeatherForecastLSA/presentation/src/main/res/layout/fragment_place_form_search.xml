@@ -5,14 +5,14 @@
 
         <variable
             name="viewModel"
-            type="com.android.bigserj.PlaceForm.PlaceFormSearchViewModel" />
+            type="com.orangeTree.bigserj.PlaceForm.PlaceFormSearchViewModel" />
     </data>
 
     <ScrollView
         android:id="@+id/scroll_search2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/gradient_bcgr_main_activity">
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
