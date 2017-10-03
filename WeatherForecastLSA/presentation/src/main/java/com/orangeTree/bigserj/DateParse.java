@@ -42,7 +42,7 @@ public class DateParse {
     // выдераем из даты     день недели и время
     @RequiresApi(api = Build.VERSION_CODES.N)
     public static String parseToDayAndTime(String originalDate) throws ParseException {
-        return new SimpleDateFormat("EEEE, HH:mm")
+        return new SimpleDateFormat("EEE, HH:mm")
                 .format(parseOriginalStringToDate(originalDate));
     }
 

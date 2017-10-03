@@ -96,7 +96,8 @@ public class FirstPageViewModel implements BaseViewModel {
                     .newInstance(firstPageActivity.getSupportFragmentManager()), true);
         }else{
             state.set(STATE.PROGRESS);
-            firstPageActivity.getSupportFragmentManager().popBackStack();
+            if(!firstPageActivity.getSupportFragmentManager().isDestroyed())
+                firstPageActivity.getSupportFragmentManager().popBackStack();
         }
     }
 
@@ -111,15 +112,6 @@ public class FirstPageViewModel implements BaseViewModel {
     public void closeSearchFragment() {
         state.set(STATE.PROGRESS);
         firstPageActivity.getSupportFragmentManager().popBackStack();
-    }
-
-
-    public void closeAllFragments(){
-        System.out.println("iiiiiii   "+firstPageActivity.getSupportFragmentManager().getBackStackEntryCount());
-        for(int i=firstPageActivity.getSupportFragmentManager().getBackStackEntryCount();i>=0;i--) {
-            firstPageActivity.getSupportFragmentManager().popBackStack();
-            closeSearchFragment();
-        }
     }
 
 }

@@ -30,7 +30,6 @@ public class GooglePlaceApiViewModel implements BaseViewModelFragment,PlaceSelec
 
         googlePlaceApiFragment.getActivity().getSupportFragmentManager().popBackStack();
 
-
         // заполняем инфой соотв поля нового места
         PlaceFormViewModel.cityPlaceForm = place.getName().toString();
         PlaceFormViewModel.latPlaceForm = String.valueOf(place.getLatLng().latitude);
@@ -58,7 +57,6 @@ public class GooglePlaceApiViewModel implements BaseViewModelFragment,PlaceSelec
 
     @Override
     public void destroyView() {
-        googlePlaceApiFragment.getActivity().getSupportFragmentManager().popBackStack();
     }
 
     @Override

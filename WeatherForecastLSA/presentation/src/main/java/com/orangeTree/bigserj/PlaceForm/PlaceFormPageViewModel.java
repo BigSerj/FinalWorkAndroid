@@ -235,6 +235,9 @@ public class PlaceFormPageViewModel implements BaseViewModelFragment {
 
 
     private void setChangeableParameters() {
+        if (pageSettingsAdapter==null)
+            settingsHelper = new SettingsHelper(placeFormPageFragment.getContext());
+
         pageSettingsAdapter.initReload();
 
         // 2
